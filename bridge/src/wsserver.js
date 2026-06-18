@@ -34,9 +34,10 @@ class WsServer extends EventEmitter {
   }
 
   stop() {
+    for (const ws of this._clients) ws.terminate()
+    this._clients.clear()
     this._wss?.close()
     this._wss = null
-    this._clients.clear()
   }
 
   broadcast(data) {

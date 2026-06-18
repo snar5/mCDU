@@ -22,9 +22,15 @@ class SimConnectBridge extends EventEmitter {
 
   async connect() {
     try {
-      // Protocol.KittyHawk = MSFS 2020; Protocol.SunRise = MSFS 2024
       const { open, Protocol, ClientDataPeriod, ClientDataRequestFlag } = require('node-simconnect')
-      const { handle } = await open('mCDU-Bridge', Protocol.KittyHawk)
+
+      // Try MSFS 2020 protocol first, fall back to MSFS 2024
+      let handle
+      try {
+        ;({ handle } = await open('mCDU-Bridge', Protocol.KittyHawk))
+      } catch {
+        ;({ handle } = await open('mCDU-Bridge', Protocol.SunRise))
+      }
       this._handle = handle
 
       handle.mapClientDataNameToID(CDU_AREA_NAME, AREA_ID)
