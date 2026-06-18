@@ -8,7 +8,7 @@
     "dev": "electron . --enable-logging"
   },
   "dependencies": {
-    "node-simconnect": "^0.8.1",
+    "node-simconnect": "^4.2.0",
     "ws": "^8.18.0"
   },
   "devDependencies": {
