@@ -1,0 +1,17 @@
+{
+  "name": "mcdu-bridge",
+  "version": "0.1.0",
+  "description": "mCDU Bridge — reads Aerosoft CRJ CDU data via SimConnect and serves over WebSocket",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --enable-logging"
+  },
+  "dependencies": {
+    "node-simconnect": "^0.8.1",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "electron": "^36.0.0"
+  }
+}

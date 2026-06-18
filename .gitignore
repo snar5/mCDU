@@ -1,0 +1,5 @@
+bridge/node_modules/
+display/node_modules/
+display/src-tauri/target/
+*.log
+.DS_Store

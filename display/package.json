@@ -1,0 +1,16 @@
+{
+  "name": "mcdu-display",
+  "version": "0.1.0",
+  "description": "mCDU Display — renders the CRJ CDU grid on the PuAirKorea MCDU screen",
+  "scripts": {
+    "tauri": "tauri",
+    "dev": "tauri dev",
+    "build": "tauri build"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.6.3"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^1.6.0"
+  }
+}

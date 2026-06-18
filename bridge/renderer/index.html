@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+  <title>mCDU Bridge</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>mCDU Bridge</h1>
+
+  <section class="status-row">
+    <div class="status-item">
+      <span class="dot" id="dot-simconnect"></span>
+      <span>SimConnect</span>
+    </div>
+    <div class="status-item">
+      <span class="dot" id="dot-cdu"></span>
+      <span>CDU Data</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>WebSocket Settings</h2>
+    <label>
+      Listen host
+      <input type="text" id="ws-host" value="0.0.0.0">
+    </label>
+    <label>
+      Port
+      <input type="number" id="ws-port" value="8765" min="1024" max="65535">
+    </label>
+    <button id="btn-save-settings">Save</button>
+  </section>
+
+  <section class="actions">
+    <button id="btn-connect">Connect to SimConnect</button>
+    <button id="btn-disconnect" disabled>Disconnect</button>
+  </section>
+
+  <p id="status-text" class="status-text">Not connected.</p>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
