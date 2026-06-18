@@ -46,6 +46,9 @@ class SimConnectBridge extends EventEmitter {
       handle.on('error', (err) =>
         this.emit('status', { connected: false, dataFlowing: false, error: err.message })
       )
+      handle.on('exception', (ex) =>
+        this.emit('status', { connected: true, dataFlowing: false, error: `SimConnect exception ${ex.exception} (sendID ${ex.sendID})` })
+      )
 
       this.connected = true
       this.emit('status', { connected: true, dataFlowing: false })
