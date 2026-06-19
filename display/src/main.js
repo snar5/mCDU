@@ -5,6 +5,14 @@ const ROWS = 15
 // 0=white  1=white  2=magenta  3=green  4=amber  5=blue  6=magenta  7=red
 const COLORS = ['#ffffff', '#ffffff', '#ff4dff', '#69ff47', '#ffbf00', '#4499ff', '#ff4dff', '#ff4444']
 
+// CRJ CDU uses a custom font where some lowercase ASCII codes map to special symbols.
+// Standard printable chars pass through unchanged; CDUs only use uppercase anyway.
+const CDU_CHAR = {
+  a: '↑',  // altitude at-or-above constraint
+  b: '↓',  // altitude at-or-below constraint
+  e: ' ',  // CDU internal spacer — blank in the real font
+}
+
 // Bridge WebSocket address — stored in localStorage so the user can change it
 // without a rebuild. Falls back to a sensible default on first run.
 const DEFAULT_WS = 'ws://localhost:8765'
@@ -31,7 +39,8 @@ function renderFrame({ cells, powered }) {
     for (let col = 0; col < COLS; col++) {
       const { symbol, color, flags } = cells[row][col]
       const el = cellEls[row * COLS + col]
-      el.textContent = powered ? (symbol || ' ') : ' '
+      const ch = CDU_CHAR[symbol] ?? symbol
+      el.textContent = powered ? (ch || ' ') : ' '
       el.style.color = powered ? (COLORS[color] ?? '#ffffff') : '#1a1a1a'
       el.classList.toggle('small', !!(flags & 0x01))
       el.classList.toggle('reverse', !!(flags & 0x02))
