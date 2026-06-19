@@ -21,7 +21,7 @@
       "active": true,
       "targets": "all",
       "identifier": "com.mcdu.display",
-      "icon": []
+      "icon": ["icons/icon.png"]
     },
     "security": {
       "csp": null
