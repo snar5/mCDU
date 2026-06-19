@@ -6,7 +6,7 @@ const COLORS = ['#ffffff', '#00e5ff', '#69ff47', '#ff4dff', '#ffbf00', '#ff4444'
 
 // Bridge WebSocket address — stored in localStorage so the user can change it
 // without a rebuild. Falls back to a sensible default on first run.
-const DEFAULT_WS = 'ws://192.168.1.100:8765'
+const DEFAULT_WS = 'ws://192.168.1.232:8765'
 const wsUrl = localStorage.getItem('mcdu-ws-url') ?? DEFAULT_WS
 
 const gridEl = document.getElementById('cdu-grid')
