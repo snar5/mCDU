@@ -20,6 +20,7 @@ function createWindow() {
   })
   mainWindow.loadFile('renderer/index.html')
   mainWindow.setMenuBarVisibility(false)
+  mainWindow.on('closed', () => { mainWindow = null })
 }
 
 app.whenReady().then(() => {
