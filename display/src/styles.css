@@ -25,7 +25,10 @@ html, body {
   height: min(100vh, calc(100vw * 14 / 24));
   aspect-ratio: 24 / 14;
   font-family: 'Courier New', Courier, monospace;
-  font-size: clamp(8px, 4vw, 36px);
+  /* Size characters to fill the cell width (char width ≈ 0.6em on monospace).
+     min() mirrors the grid's own width/height constraint so font tracks correctly
+     whether the window is width- or height-constrained. */
+  font-size: clamp(6px, min(calc(100vw / 14.4), calc(100vh / 8.4)), 48px);
   font-weight: bold;
   background: #000;
 }
@@ -34,6 +37,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   color: #fff;
   line-height: 1;
   white-space: pre;
