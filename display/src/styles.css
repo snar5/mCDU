@@ -28,7 +28,7 @@ html, body {
   /* Font size tracks the smaller cell dimension (cell ≈ vw/24 × vh/14).
      min() mirrors the grid's own width/height constraint. */
   font-size: clamp(6px, min(calc(100vw / 24), calc(100vh / 14)), 32px);
-  font-weight: bold;
+  font-weight: normal;
   background: #000;
 }
 
