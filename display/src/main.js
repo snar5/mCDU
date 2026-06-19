@@ -2,8 +2,8 @@ const COLS = 24
 const ROWS = 14
 
 // CRJ color encoding (differs from PMDG):
-// 0=white  1=white  2=magenta  3=green  4=amber  5=cyan  6=cyan  7=red
-const COLORS = ['#ffffff', '#ffffff', '#ff4dff', '#69ff47', '#ffbf00', '#00e5ff', '#00e5ff', '#ff4444']
+// 0=white  1=white  2=magenta  3=green  4=amber  5=cyan  6=magenta  7=red
+const COLORS = ['#ffffff', '#ffffff', '#ff4dff', '#69ff47', '#ffbf00', '#00e5ff', '#ff4dff', '#ff4444']
 
 // Bridge WebSocket address — stored in localStorage so the user can change it
 // without a rebuild. Falls back to a sensible default on first run.
