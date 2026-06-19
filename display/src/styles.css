@@ -22,6 +22,8 @@ html, body {
   display: grid;
   grid-template-columns: repeat(24, 1fr);
   grid-template-rows: repeat(15, 1fr);
+  row-gap: 5px;
+  
   /* Whichever constraint (width or height) is tighter wins */
   width: min(100vw, calc(100vh * 24 / 15));
   height: min(100vh, calc(100vw * 15 / 24));
@@ -29,9 +31,10 @@ html, body {
   font-family: 'B612 Mono', 'Courier New', monospace;
   /* Font size tracks the smaller cell dimension (cell ≈ vw/24 × vh/15).
      min() mirrors the grid's own width/height constraint. */
-  font-size: clamp(6px, min(calc(100vw / 24), calc(100vh / 15)), 32px);
+  font-size: clamp(6px, min(calc(100vw / 28), calc(100vh / 19)), 32px);
   font-weight: normal;
   background: #000;
+  
 }
 
 .cell {
