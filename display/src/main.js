@@ -1,5 +1,3 @@
-import { invoke } from '@tauri-apps/api/tauri'
-
 const COLS = 24
 const ROWS = 14
 
@@ -53,10 +51,15 @@ function connectWs(url) {
 
 connectWs(wsUrl)
 
-// F11 → fullscreen toggle via Tauri command
+// F11 → fullscreen toggle (Tauri command when inside app, native API in browser)
 document.addEventListener('keydown', async (e) => {
   if (e.key === 'F11') {
     e.preventDefault()
-    await invoke('toggle_fullscreen')
+    if (window.__TAURI__) {
+      const { invoke } = await import('@tauri-apps/api/tauri')
+      await invoke('toggle_fullscreen')
+    } else {
+      document.documentElement.requestFullscreen?.()
+    }
   }
 })
