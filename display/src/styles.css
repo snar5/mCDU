@@ -19,15 +19,15 @@ html, body {
 #cdu-grid {
   display: grid;
   grid-template-columns: repeat(24, 1fr);
-  grid-template-rows: repeat(14, 1fr);
+  grid-template-rows: repeat(15, 1fr);
   /* Whichever constraint (width or height) is tighter wins */
-  width: min(100vw, calc(100vh * 24 / 14));
-  height: min(100vh, calc(100vw * 14 / 24));
-  aspect-ratio: 24 / 14;
+  width: min(100vw, calc(100vh * 24 / 15));
+  height: min(100vh, calc(100vw * 15 / 24));
+  aspect-ratio: 24 / 15;
   font-family: 'Courier New', Courier, monospace;
-  /* Font size tracks the smaller cell dimension (cell ≈ vw/24 × vh/14).
+  /* Font size tracks the smaller cell dimension (cell ≈ vw/24 × vh/15).
      min() mirrors the grid's own width/height constraint. */
-  font-size: clamp(6px, min(calc(100vw / 24), calc(100vh / 14)), 32px);
+  font-size: clamp(6px, min(calc(100vw / 24), calc(100vh / 15)), 32px);
   font-weight: normal;
   background: #000;
 }

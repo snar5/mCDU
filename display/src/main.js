@@ -1,5 +1,5 @@
 const COLS = 24
-const ROWS = 14
+const ROWS = 15
 
 // CRJ color encoding (differs from PMDG):
 // 0=white  1=white  2=magenta  3=green  4=amber  5=blue  6=magenta  7=red

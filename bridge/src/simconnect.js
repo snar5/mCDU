@@ -4,12 +4,11 @@ const EventEmitter = require('events')
 const CDU_AREA_NAME = 'ASCRJ CDU1 Data'
 
 const COLS = 24
-const ROWS = 14
+const ROWS = 15  // 14 content rows + 1 status row (EXEC indicator etc.)
 // Aerosoft CRJ appears to use 2 bytes per cell (symbol + color/flags packed),
-// no separate Powered byte — total 672. Was 1009 (3 bytes + powered) but that
-// caused SIMCONNECT_EXCEPTION_OUT_OF_BOUNDS (31), meaning the area is smaller.
+// no separate Powered byte — total 720.
 const BYTES_PER_CELL = 2
-const DATA_SIZE = COLS * ROWS * BYTES_PER_CELL // 672
+const DATA_SIZE = COLS * ROWS * BYTES_PER_CELL // 720
 
 const AREA_ID = 1
 const DEF_ID = 1
