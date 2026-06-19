@@ -10,6 +10,7 @@ const DEFAULT_WS = 'ws://localhost:8765'
 
 const gridEl = document.getElementById('cdu-grid')
 const overlay = document.getElementById('overlay-disconnected')
+const overlayStatus = document.getElementById('overlay-status')
 const wsAddressEl = document.getElementById('ws-address')
 const wsForm = document.getElementById('ws-form')
 const wsInput = document.getElementById('ws-input')
@@ -37,17 +38,35 @@ function renderFrame({ cells, powered }) {
   }
 }
 
+let retryTimer = null
 let activeWs = null
+
 function connectWs(url) {
+  clearTimeout(retryTimer)
+  if (activeWs) {
+    activeWs.onclose = null  // detach before closing so it doesn't self-retry
+    activeWs.onerror = null
+    activeWs.close()
+  }
+
   wsAddressEl.textContent = url
   wsInput.value = url
-  activeWs = new WebSocket(url)
-  activeWs.onmessage = (e) => renderFrame(JSON.parse(e.data))
-  activeWs.onclose = () => {
+  overlayStatus.textContent = 'Connecting to bridge…'
+
+  const ws = new WebSocket(url)
+  activeWs = ws
+
+  ws.onmessage = (e) => renderFrame(JSON.parse(e.data))
+  ws.onopen = () => { overlayStatus.textContent = 'Connected — waiting for data…' }
+  ws.onclose = () => {
+    if (ws !== activeWs) return  // superseded connection, ignore
     overlay.hidden = false
-    setTimeout(() => connectWs(url), 3000)
+    overlayStatus.textContent = 'Connection lost — retrying…'
+    retryTimer = setTimeout(() => connectWs(url), 3000)
   }
-  activeWs.onerror = () => activeWs.close()
+  ws.onerror = () => {
+    overlayStatus.textContent = 'Could not connect — is the bridge running?'
+  }
 }
 
 wsForm.addEventListener('submit', (e) => {
@@ -55,7 +74,6 @@ wsForm.addEventListener('submit', (e) => {
   const url = wsInput.value.trim()
   if (!url) return
   localStorage.setItem('mcdu-ws-url', url)
-  activeWs?.close()  // cancel current retry loop
   connectWs(url)
 })
 
