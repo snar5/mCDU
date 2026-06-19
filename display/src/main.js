@@ -7,13 +7,12 @@ const COLORS = ['#ffffff', '#00e5ff', '#69ff47', '#ff4dff', '#ffbf00', '#ff4444'
 // Bridge WebSocket address — stored in localStorage so the user can change it
 // without a rebuild. Falls back to a sensible default on first run.
 const DEFAULT_WS = 'ws://localhost:8765'
-const wsUrl = localStorage.getItem('mcdu-ws-url') ?? DEFAULT_WS
 
 const gridEl = document.getElementById('cdu-grid')
 const overlay = document.getElementById('overlay-disconnected')
 const wsAddressEl = document.getElementById('ws-address')
-
-wsAddressEl.textContent = wsUrl
+const wsForm = document.getElementById('ws-form')
+const wsInput = document.getElementById('ws-input')
 
 // Pre-build all 24×14 cell elements once
 const cellEls = []
@@ -32,24 +31,37 @@ function renderFrame({ cells, powered }) {
       const el = cellEls[row * COLS + col]
       el.textContent = powered ? (symbol || ' ') : ' '
       el.style.color = powered ? (COLORS[color] ?? '#ffffff') : '#1a1a1a'
-      // flags bit 0 = small font, bit 1 = reverse video
       el.classList.toggle('small', !!(flags & 0x01))
       el.classList.toggle('reverse', !!(flags & 0x02))
     }
   }
 }
 
+let activeWs = null
 function connectWs(url) {
-  const ws = new WebSocket(url)
-  ws.onmessage = (e) => renderFrame(JSON.parse(e.data))
-  ws.onclose = () => {
+  wsAddressEl.textContent = url
+  wsInput.value = url
+  activeWs = new WebSocket(url)
+  activeWs.onmessage = (e) => renderFrame(JSON.parse(e.data))
+  activeWs.onclose = () => {
     overlay.hidden = false
     setTimeout(() => connectWs(url), 3000)
   }
-  ws.onerror = () => ws.close()
+  activeWs.onerror = () => activeWs.close()
 }
 
-connectWs(wsUrl)
+wsForm.addEventListener('submit', (e) => {
+  e.preventDefault()
+  const url = wsInput.value.trim()
+  if (!url) return
+  localStorage.setItem('mcdu-ws-url', url)
+  activeWs?.close()  // cancel current retry loop
+  connectWs(url)
+})
+
+const savedUrl = localStorage.getItem('mcdu-ws-url') ?? DEFAULT_WS
+wsInput.value = savedUrl
+connectWs(savedUrl)
 
 // F11 → fullscreen toggle (Tauri command when inside app, native API in browser)
 document.addEventListener('keydown', async (e) => {

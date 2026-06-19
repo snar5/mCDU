@@ -58,6 +58,35 @@ html, body {
 
 #overlay-disconnected[hidden] { display: none; }
 
+#ws-form {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+#ws-input {
+  background: #111;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #e0e0e0;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  padding: 5px 8px;
+  width: 220px;
+}
+
+#ws-form button {
+  background: #2a5298;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 5px 12px;
+}
+
+#ws-form button:hover { background: #3a6ac8; }
+
 .ws-address {
   font-size: 12px;
   color: #6080a0;
