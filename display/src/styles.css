@@ -25,10 +25,9 @@ html, body {
   height: min(100vh, calc(100vw * 14 / 24));
   aspect-ratio: 24 / 14;
   font-family: 'Courier New', Courier, monospace;
-  /* Size characters to fill the cell width (char width ≈ 0.6em on monospace).
-     min() mirrors the grid's own width/height constraint so font tracks correctly
-     whether the window is width- or height-constrained. */
-  font-size: clamp(6px, min(calc(100vw / 14.4), calc(100vh / 8.4)), 48px);
+  /* Font size tracks the smaller cell dimension (cell ≈ vw/24 × vh/14).
+     min() mirrors the grid's own width/height constraint. */
+  font-size: clamp(6px, min(calc(100vw / 24), calc(100vh / 14)), 32px);
   font-weight: bold;
   background: #000;
 }
