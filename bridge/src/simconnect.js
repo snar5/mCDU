@@ -91,6 +91,11 @@ class SimConnectBridge extends EventEmitter {
     // No separate Powered byte in this layout — treat as always powered
     const powered = true
 
+    // DEBUG: log color index for every non-space cell
+    cells.forEach((row, r) => row.forEach((cell, c) => {
+      if (cell.symbol.trim()) console.log(`[mCDU] [${r},${c}] '${cell.symbol}' color=${cell.color} flags=${cell.flags}`)
+    }))
+
     if (!this.dataFlowing) {
       this.dataFlowing = true
       this.emit('status', { connected: true, dataFlowing: true })
