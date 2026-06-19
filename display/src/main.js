@@ -50,7 +50,6 @@ function connectWs(url) {
   }
 
   wsAddressEl.textContent = url
-  wsInput.value = url
   overlayStatus.textContent = 'Connecting to bridge…'
 
   const ws = new WebSocket(url)
