@@ -10,6 +10,7 @@ class WsServer extends EventEmitter {
     this._wss = null
     this._clients = new Set()
     this._settings = { host: DEFAULT_HOST, port: DEFAULT_PORT }
+    this._lastFrame = null
   }
 
   getSettings() {
@@ -27,6 +28,7 @@ class WsServer extends EventEmitter {
     this._wss = new WebSocketServer({ host: this._settings.host, port: this._settings.port })
     this._wss.on('connection', (ws) => {
       this._clients.add(ws)
+      if (this._lastFrame) ws.send(this._lastFrame)
       ws.on('close', () => this._clients.delete(ws))
     })
     this._wss.on('error', (err) => this.emit('error', err))
@@ -43,6 +45,7 @@ class WsServer extends EventEmitter {
   broadcast(data) {
     if (!this._wss) return
     const msg = JSON.stringify(data)
+    this._lastFrame = msg
     for (const ws of this._clients) {
       if (ws.readyState === ws.OPEN) ws.send(msg)
     }

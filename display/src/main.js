@@ -1,8 +1,9 @@
 const COLS = 24
 const ROWS = 14
 
-// color index → CSS color (0=white 1=cyan 2=green 3=magenta 4=amber 5=red)
-const COLORS = ['#ffffff', '#00e5ff', '#69ff47', '#ff4dff', '#ffbf00', '#ff4444']
+// color index → CSS color (0=white 1=cyan 2=green 3=magenta 4=amber 5=cyan-dim)
+// The CRJ uses index 5 for label rows (same visual as cyan in the sim, not red)
+const COLORS = ['#ffffff', '#00e5ff', '#69ff47', '#ff4dff', '#ffbf00', '#00e5ff']
 
 // Bridge WebSocket address — stored in localStorage so the user can change it
 // without a rebuild. Falls back to a sensible default on first run.

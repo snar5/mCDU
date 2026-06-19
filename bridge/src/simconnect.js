@@ -83,8 +83,8 @@ class SimConnectBridge extends EventEmitter {
         const colorByte = buf.readUInt8(offset + 1)
         cells[row][col] = {
           symbol: String.fromCharCode(buf.readUInt8(offset)),
-          color: (colorByte >> 4) & 0x0F,
-          flags: colorByte & 0x0F,
+          color: colorByte & 0x0F,
+          flags: (colorByte >> 4) & 0x0F,
         }
       }
     }
