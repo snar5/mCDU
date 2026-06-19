@@ -5,8 +5,11 @@ const CDU_AREA_NAME = 'ASCRJ CDU1 Data'
 
 const COLS = 24
 const ROWS = 14
-const BYTES_PER_CELL = 3 // symbol (ASCII), color (0–5), flags (bitmask)
-const DATA_SIZE = COLS * ROWS * BYTES_PER_CELL + 1 // +1 for Powered byte
+// Aerosoft CRJ appears to use 2 bytes per cell (symbol + color/flags packed),
+// no separate Powered byte — total 672. Was 1009 (3 bytes + powered) but that
+// caused SIMCONNECT_EXCEPTION_OUT_OF_BOUNDS (31), meaning the area is smaller.
+const BYTES_PER_CELL = 2
+const DATA_SIZE = COLS * ROWS * BYTES_PER_CELL // 672
 
 const AREA_ID = 1
 const DEF_ID = 1
@@ -77,14 +80,16 @@ class SimConnectBridge extends EventEmitter {
     for (let col = 0; col < COLS; col++) {
       for (let row = 0; row < ROWS; row++) {
         const offset = (col * ROWS + row) * BYTES_PER_CELL
+        const colorByte = buf.readUInt8(offset + 1)
         cells[row][col] = {
           symbol: String.fromCharCode(buf.readUInt8(offset)),
-          color: buf.readUInt8(offset + 1),
-          flags: buf.readUInt8(offset + 2),
+          color: colorByte & 0x0F,   // lower nibble = color index
+          flags: (colorByte >> 4) & 0x0F, // upper nibble = flags
         }
       }
     }
-    const powered = buf.readUInt8(COLS * ROWS * BYTES_PER_CELL) !== 0
+    // No separate Powered byte in this layout — treat as always powered
+    const powered = true
 
     if (!this.dataFlowing) {
       this.dataFlowing = true
