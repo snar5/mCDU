@@ -10,7 +10,8 @@ const DATA_SIZE = COLS * ROWS * BYTES_PER_CELL + 1 // +1 for Powered byte
 
 const AREA_ID = 1
 const DEF_ID = 1
-const REQUEST_ID = 1
+const REQUEST_ID_ONCE = 1  // one-shot on connect to get current state
+const REQUEST_ID_SET  = 2  // ongoing — fires whenever the sim writes the area
 
 class SimConnectBridge extends EventEmitter {
   constructor() {
@@ -33,28 +34,31 @@ class SimConnectBridge extends EventEmitter {
       }
       this._handle = handle
 
+      console.log('[mCDU] Subscribing to client data area:', CDU_AREA_NAME)
       handle.mapClientDataNameToID(CDU_AREA_NAME, AREA_ID)
 
       // Register the full block as one raw byte-array datum
       handle.addToClientDataDefinition(DEF_ID, 0, DATA_SIZE, 0, 0)
 
-      // Receive an update whenever the sim writes new data to the area
-      handle.requestClientData(
-        AREA_ID,
-        REQUEST_ID,
-        DEF_ID,
-        ClientDataPeriod.ON_SET,
-        ClientDataRequestFlag.CLIENT_DATA_REQUEST_FLAG_DEFAULT
-      )
+      // Pull current state immediately, then subscribe to future writes
+      handle.requestClientData(AREA_ID, REQUEST_ID_ONCE, DEF_ID,
+        ClientDataPeriod.ONCE, ClientDataRequestFlag.CLIENT_DATA_REQUEST_FLAG_DEFAULT)
+      handle.requestClientData(AREA_ID, REQUEST_ID_SET, DEF_ID,
+        ClientDataPeriod.ON_SET, ClientDataRequestFlag.CLIENT_DATA_REQUEST_FLAG_DEFAULT)
 
-      handle.on('clientData', ({ data }) => this._parse(data))
+      handle.on('clientData', ({ data }) => {
+        console.log('[mCDU] clientData event received, bytes:', DATA_SIZE)
+        this._parse(data)
+      })
       handle.on('quit', () => this._onDisconnect())
-      handle.on('error', (err) =>
+      handle.on('error', (err) => {
+        console.error('[mCDU] SimConnect error:', err.message)
         this.emit('status', { connected: false, dataFlowing: false, error: err.message })
-      )
-      handle.on('exception', (ex) =>
+      })
+      handle.on('exception', (ex) => {
+        console.error('[mCDU] SimConnect exception:', JSON.stringify(ex))
         this.emit('status', { connected: true, dataFlowing: false, error: `SimConnect exception ${ex.exception} (sendID ${ex.sendID})` })
-      )
+      })
 
       this.connected = true
       this.emit('status', { connected: true, dataFlowing: false })
