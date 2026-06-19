@@ -24,8 +24,9 @@ html, body {
   width: min(100vw, calc(100vh * 24 / 14));
   height: min(100vh, calc(100vw * 14 / 24));
   aspect-ratio: 24 / 14;
-  font-family: 'B612 Mono', 'Courier New', Courier, monospace;
-  font-size: clamp(7px, 2.4vw, 24px);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: clamp(8px, 4vw, 36px);
+  font-weight: bold;
   background: #000;
 }
 
