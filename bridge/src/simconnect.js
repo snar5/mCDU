@@ -77,14 +77,14 @@ class SimConnectBridge extends EventEmitter {
   _parse(rawBuffer) {
     const buf = rawBuffer.readBytes(DATA_SIZE)
     const cells = Array.from({ length: ROWS }, () => Array(COLS))
-    for (let col = 0; col < COLS; col++) {
-      for (let row = 0; row < ROWS; row++) {
-        const offset = (col * ROWS + row) * BYTES_PER_CELL
+    for (let row = 0; row < ROWS; row++) {
+      for (let col = 0; col < COLS; col++) {
+        const offset = (row * COLS + col) * BYTES_PER_CELL
         const colorByte = buf.readUInt8(offset + 1)
         cells[row][col] = {
           symbol: String.fromCharCode(buf.readUInt8(offset)),
-          color: colorByte & 0x0F,   // lower nibble = color index
-          flags: (colorByte >> 4) & 0x0F, // upper nibble = flags
+          color: colorByte & 0x0F,
+          flags: (colorByte >> 4) & 0x0F,
         }
       }
     }
